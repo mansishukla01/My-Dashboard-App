@@ -1,4 +1,3 @@
-
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,8 +17,7 @@ export default function DatePickerComponent({ selectedDate, setSelectedDate }) {
         selected={selectedDate}
         onChange={(date) => setSelectedDate(date)}
         filterDate={isWeekday}
-        placeholderText="Pick a date (1-5 July, weekdays only)"
-      />
+        placeholderText="Pick a date (1-5 July, weekdays only)"/>
     </div>
   );
 }
