@@ -36,8 +36,7 @@ export default function StudentTable({ students }) {
         placeholder="Search by name or class"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ padding: "5px", width: "220px", marginBottom: "10px" }}
-      />
+        style={{ padding: "5px", width: "220px", marginBottom: "10px" }}/>
 
       <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
@@ -74,8 +73,7 @@ export default function StudentTable({ students }) {
               color: currentPage === i + 1 ? "#fff" : "#000",
               border: "none",
               cursor: "pointer",
-            }}
-          >
+            }}>
             {i + 1}
           </button>
         ))}
