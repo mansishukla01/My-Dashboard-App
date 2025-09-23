@@ -1,6 +1,4 @@
-
 import React, { useState, useMemo } from "react";
-
 export default function StudentTable({ students }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,6 +36,7 @@ export default function StudentTable({ students }) {
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ padding: "5px", width: "220px", marginBottom: "10px" }}/>
 
+
       <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
@@ -74,6 +73,7 @@ export default function StudentTable({ students }) {
               border: "none",
               cursor: "pointer",
             }}>
+
             {i + 1}
           </button>
         ))}
