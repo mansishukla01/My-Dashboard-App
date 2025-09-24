@@ -1,7 +1,8 @@
-import React, { useState, useEffect,useMemo} from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import studentsData from "./students.json";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA336A", "#33AA77", "#FF4444"];
 
@@ -13,15 +14,17 @@ export default function App() {
   const rowsPerPage = 5;
   const [selectedDate, setSelectedDate] = useState(null);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // API call
         const response = await fetch("http://localhost:5000/students");
+        if (!response.ok) throw new Error("API not working");
         const data = await response.json();
         setStudents(data);
       } catch (err) {
-        console.error(err);
+        console.warn("Using local JSON fallback:", err.message);
+        setStudents(studentsData.students); // fallback
       } finally {
         setLoading(false);
       }
@@ -58,7 +61,10 @@ export default function App() {
     return day !== 0 && day !== 6 && month === 6 && dateNum >= 1 && dateNum <= 5;
   };
 
-  const pieData = useMemo(() => students.map((s) => ({ name: s.name, value: s.marks })), [students]);
+  const pieData = useMemo(
+    () => students.map((s) => ({ name: s.name, value: s.marks })),
+    [students]
+  );
 
   if (loading) return <div>Loading data...</div>;
 
@@ -72,7 +78,8 @@ export default function App() {
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
           filterDate={isWeekday}
-          placeholderText="Pick a date (1-5 July, weekdays only)" />
+          placeholderText="Pick a date (1-5 July, weekdays only)"
+        />
       </div>
 
       <div style={{ marginBottom: "10px" }}>
@@ -81,10 +88,15 @@ export default function App() {
           placeholder="Search by name or class"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ padding: "5px", width: "220px" }}/>
+          style={{ padding: "5px", width: "220px" }}
+        />
       </div>
 
-      <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table
+        border="1"
+        cellPadding="8"
+        style={{ borderCollapse: "collapse", width: "100%" }}
+      >
         <thead>
           <tr>
             <th onClick={() => sortBy("roll")}>Roll No</th>
@@ -119,7 +131,8 @@ export default function App() {
               color: currentPage === i + 1 ? "#fff" : "#000",
               border: "none",
               cursor: "pointer",
-            }}>
+            }}
+          >
             {i + 1}
           </button>
         ))}
@@ -128,7 +141,15 @@ export default function App() {
       <div style={{ width: "100%", height: "300px", marginTop: "30px" }}>
         <ResponsiveContainer>
           <PieChart>
-            <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              label
+            >
               {pieData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
@@ -141,5 +162,3 @@ export default function App() {
     </div>
   );
 }
-
-
